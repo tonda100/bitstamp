@@ -5,7 +5,6 @@ import static java.lang.System.Logger.Level.WARNING;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -37,7 +36,7 @@ public class BitstampBoundary {
 
     private static final System.Logger logger = System.getLogger(BitstampBoundary.class.getName());
 
-    private static final String URL_TICKER = "https://www.bitstamp.net/api/v2/ticker/{currency_pair}/";
+    private static final String URL_TICKER = "https://www.bitstamp.net/api/v2/ticker/";
 
     private static final String URL_BALANCE = "https://www.bitstamp.net/api/v2/balance/";
 
@@ -49,14 +48,13 @@ public class BitstampBoundary {
     }
 
     public Optional<Price> getRecentPrice(ExchangePair exchangePair) {
-        WebTarget target = client.target(URL_TICKER);
-        Response response = target.resolveTemplate("currency_pair", exchangePair.getCode())
-                .request(MediaType.APPLICATION_JSON).get();
+        WebTarget target = client.target(URL_TICKER + exchangePair.getCode());
+        Response response = target.request(MediaType.APPLICATION_JSON).get();
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             JsonObject body = response.readEntity(JsonObject.class);
             Double ask = Double.valueOf(body.getString("ask"));
             Double bid = Double.valueOf(body.getString("bid"));
-            return Optional.of(new Price(ZonedDateTime.now(), ask, bid));
+            return Optional.of(new Price(ask, bid));
         } else {
             logger.log(WARNING, "Cannot receive price for " + exchangePair);
         }
@@ -105,5 +103,9 @@ public class BitstampBoundary {
         if (this.client != null) {
             this.client.close();
         }
+    }
+
+    public boolean isCredentialsValid(String customerId, String apiKey, String secretKey) {
+        return getWallet(customerId, apiKey, secretKey) != null;
     }
 }
