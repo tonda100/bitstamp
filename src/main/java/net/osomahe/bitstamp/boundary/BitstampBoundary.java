@@ -21,9 +21,9 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.salaryrobot.api.entity.ExchangePair;
-import com.salaryrobot.api.entity.Price;
-import com.salaryrobot.api.strategy.Wallet;
+import com.salaryrobot.api.exchange.entity.ExchangePair;
+import com.salaryrobot.api.ticker.entity.Price;
+import com.salaryrobot.api.exchange.boundary.Wallet;
 import net.osomahe.bitstamp.entity.BitstampWallet;
 import net.osomahe.bitstamp.entity.BitstampWalletException;
 
@@ -56,7 +56,7 @@ public class BitstampBoundary {
             Double bid = Double.valueOf(body.getString("bid"));
             return Optional.of(new Price(ask, bid));
         } else {
-            logger.log(WARNING, "Cannot receive price for " + exchangePair);
+            logger.log(WARNING, "Cannot receive ticker for " + exchangePair);
         }
         return Optional.empty();
     }

@@ -2,9 +2,9 @@ package net.osomahe.bitstamp.entity;
 
 import javax.json.JsonObject;
 
-import com.salaryrobot.api.entity.Asset;
-import com.salaryrobot.api.entity.ExchangePair;
-import com.salaryrobot.api.strategy.Wallet;
+import com.salaryrobot.api.exchange.entity.Asset;
+import com.salaryrobot.api.exchange.entity.ExchangePair;
+import com.salaryrobot.api.exchange.boundary.Wallet;
 
 
 /**
