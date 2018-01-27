@@ -1,11 +1,10 @@
 package net.osomahe.bitstamp.boundary;
 
-import static java.lang.System.Logger.Level.ERROR;
-import static java.lang.System.Logger.Level.WARNING;
-
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -21,9 +20,9 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.salaryrobot.api.exchange.boundary.Wallet;
 import com.salaryrobot.api.exchange.entity.ExchangePair;
 import com.salaryrobot.api.ticker.entity.Price;
-import com.salaryrobot.api.exchange.boundary.Wallet;
 import net.osomahe.bitstamp.entity.BitstampWallet;
 import net.osomahe.bitstamp.entity.BitstampWalletException;
 
@@ -34,7 +33,7 @@ import net.osomahe.bitstamp.entity.BitstampWalletException;
 @Stateless
 public class BitstampBoundary {
 
-    private static final System.Logger logger = System.getLogger(BitstampBoundary.class.getName());
+    private static final Logger logger = Logger.getLogger(BitstampBoundary.class.getName());
 
     private static final String URL_TICKER = "https://www.bitstamp.net/api/v2/ticker/";
 
@@ -56,7 +55,7 @@ public class BitstampBoundary {
             Double bid = Double.valueOf(body.getString("bid"));
             return Optional.of(new Price(ask, bid));
         } else {
-            logger.log(WARNING, "Cannot receive ticker for " + exchangePair);
+            logger.log(Level.WARNING, "Cannot receive ticker for " + exchangePair);
         }
         return Optional.empty();
     }
@@ -82,7 +81,7 @@ public class BitstampBoundary {
                 return new BitstampWallet(data);
             }
         } catch (Exception e) {
-            logger.log(ERROR, String.format("Loading of wallet failed for customer: %s and apiKey: %s", customerId, apiKey), e);
+            logger.log(Level.SEVERE, String.format("Loading of wallet failed for customer: %s and apiKey: %s", customerId, apiKey), e);
             throw new BitstampWalletException(customerId, apiKey);
         }
         return null;
