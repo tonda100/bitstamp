@@ -2,9 +2,9 @@ package net.osomahe.bitstamp.entity;
 
 import javax.json.JsonObject;
 
+import com.salaryrobot.api.exchange.boundary.Wallet;
 import com.salaryrobot.api.exchange.entity.Asset;
 import com.salaryrobot.api.exchange.entity.ExchangePair;
-import com.salaryrobot.api.exchange.boundary.Wallet;
 
 
 /**
@@ -25,6 +25,10 @@ public class BitstampWallet implements Wallet {
 
     public BitstampWallet(JsonObject data) {
         this.data = data;
+    }
+
+    public JsonObject getData() {
+        return data;
     }
 
     @Override
