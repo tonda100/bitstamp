@@ -2,7 +2,7 @@ package net.osomahe.bitstamp.control;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.logging.Level;
+import java.time.ZonedDateTime;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -18,11 +18,8 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.salaryrobot.api.exchange.boundary.Wallet;
 import com.salaryrobot.api.exchange.entity.ExchangePair;
 import net.osomahe.bitstamp.entity.BitstampCredentials;
-import net.osomahe.bitstamp.entity.BitstampWallet;
-import net.osomahe.bitstamp.entity.BitstampWalletException;
 import net.osomahe.bitstamp.entity.BuyTransaction;
 
 
@@ -34,6 +31,7 @@ public class MarketService {
     private static final Logger logger = Logger.getLogger(MarketService.class.getName());
 
     private static final String URL_MARKET_BUY = "https://www.bitstamp.net/api/v2/buy/market/";
+
     private static final String URL_MARKET_SELL = "https://www.bitstamp.net/api/v2/sell/market/";
 
     @Inject
@@ -47,7 +45,6 @@ public class MarketService {
     }
 
 
-
     public BuyTransaction buyMarketOrder(Double commodityUnits, ExchangePair exchangePair, BitstampCredentials credentials) {
         WebTarget target = client.target(URL_MARKET_BUY + exchangePair.getCode());
 
@@ -56,6 +53,14 @@ public class MarketService {
 
         Response response = target.request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            JsonObject body = response.readEntity(JsonObject.class);
+            BuyTransaction transaction = new BuyTransaction();
+            transaction.setOrderId(body.getString("id"));
+            transaction.setPrice(Double.valueOf(body.getString("price")));
+            transaction.setDateTime(ZonedDateTime.now());
+            return transaction;
+        }
         return null;
     }
 
