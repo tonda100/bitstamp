@@ -13,6 +13,7 @@ import net.osomahe.bitstamp.control.MarketService;
 import net.osomahe.bitstamp.control.PriceService;
 import net.osomahe.bitstamp.entity.BitstampCredentials;
 import net.osomahe.bitstamp.entity.BuyTransaction;
+import net.osomahe.bitstamp.entity.SellTransaction;
 
 
 /**
@@ -38,7 +39,11 @@ public class BitstampBoundary {
         return this.serviceBalance.findWallet(credentials);
     }
 
-    public BuyTransaction buyCommodity(Double commodityUnits, ExchangePair exchangePair, BitstampCredentials credentials) {
+    public Optional<BuyTransaction> buyCommodity(Double commodityUnits, ExchangePair exchangePair, BitstampCredentials credentials) {
         return this.serviceMarket.buyMarketOrder(commodityUnits, exchangePair, credentials);
+    }
+
+    public Optional<SellTransaction> sellCommodity(Double commodityUnits, ExchangePair exchangePair, BitstampCredentials credentials) {
+        return this.serviceMarket.sellMarketOrder(commodityUnits, exchangePair, credentials);
     }
 }
