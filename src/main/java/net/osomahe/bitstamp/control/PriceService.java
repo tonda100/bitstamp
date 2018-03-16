@@ -22,7 +22,7 @@ import com.salaryrobot.api.ticker.entity.Price;
  * @author Antonin Stoklasek
  */
 @Stateless
-public class PriceService {
+public class PriceService extends AbstractBitstampService {
     private static final Logger logger = Logger.getLogger(PriceService.class.getName());
 
     private static final String URL_TICKER = "https://www.bitstamp.net/api/v2/ticker/";
@@ -35,6 +35,10 @@ public class PriceService {
     }
 
     public Optional<Price> getRecentPrice(ExchangePair exchangePair) {
+        return tryMultipleTimes(() -> getRecentPriceUnsafe(exchangePair));
+    }
+
+    private Optional<Price> getRecentPriceUnsafe(ExchangePair exchangePair) {
         WebTarget target = client.target(URL_TICKER + exchangePair.getCode());
         Response response = target.request(MediaType.APPLICATION_JSON).get();
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
