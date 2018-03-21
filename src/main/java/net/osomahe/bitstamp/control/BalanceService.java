@@ -24,7 +24,7 @@ import net.osomahe.bitstamp.entity.BitstampWallet;
  * @author Antonin Stoklasek
  */
 @Stateless
-public class BalanceService extends AbstractBitstampService {
+public class BalanceService {
 
     private static final String URL_BALANCE = "https://www.bitstamp.net/api/v2/balance/";
 
@@ -39,10 +39,6 @@ public class BalanceService extends AbstractBitstampService {
     }
 
     public Optional<Wallet> findWallet(BitstampCredentials credentials) {
-        return tryMultipleTimes(() -> findWalletUnsafe(credentials));
-    }
-
-    private Optional<Wallet> findWalletUnsafe(BitstampCredentials credentials) {
         WebTarget target = this.client.target(URL_BALANCE);
 
         Form form = this.serviceSignature.createSignedForm(credentials);

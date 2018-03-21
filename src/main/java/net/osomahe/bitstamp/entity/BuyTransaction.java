@@ -4,6 +4,8 @@ import java.time.ZonedDateTime;
 
 
 /**
+ * Class with buy details.
+ *
  * @author Antonin Stoklasek
  */
 public class BuyTransaction {

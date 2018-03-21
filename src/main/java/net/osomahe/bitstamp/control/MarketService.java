@@ -30,7 +30,7 @@ import net.osomahe.bitstamp.entity.SellTransaction;
  * @author Antonin Stoklasek
  */
 @Stateless
-public class MarketService extends AbstractBitstampService {
+public class MarketService {
     private static final Logger logger = Logger.getLogger(MarketService.class.getName());
 
     private static final String URL_MARKET_BUY = "https://www.bitstamp.net/api/v2/buy/market/";
@@ -48,10 +48,6 @@ public class MarketService extends AbstractBitstampService {
     }
 
     public Optional<BuyTransaction> buyMarketOrder(Double commodityUnits, ExchangePair exchangePair, BitstampCredentials credentials) {
-        return tryMultipleTimes(() -> buyMarketOrderUnsafe(commodityUnits, exchangePair, credentials));
-    }
-
-    private Optional<BuyTransaction> buyMarketOrderUnsafe(Double commodityUnits, ExchangePair exchangePair, BitstampCredentials credentials) {
         WebTarget target = client.target(URL_MARKET_BUY + exchangePair.getCode() + "/");
 
         Form form = this.serviceSignature.createSignedForm(credentials);
@@ -74,10 +70,6 @@ public class MarketService extends AbstractBitstampService {
     }
 
     public Optional<SellTransaction> sellMarketOrder(Double commodityUnits, ExchangePair exchangePair, BitstampCredentials credentials) {
-        return tryMultipleTimes(() -> sellMarketOrderUnsafe(commodityUnits, exchangePair, credentials));
-    }
-
-    private Optional<SellTransaction> sellMarketOrderUnsafe(Double commodityUnits, ExchangePair exchangePair, BitstampCredentials credentials) {
         WebTarget target = client.target(URL_MARKET_SELL + exchangePair.getCode() + "/");
 
         Form form = this.serviceSignature.createSignedForm(credentials);

@@ -26,8 +26,8 @@
     <developers>
         <developer>
             <name>Antonin Stoklasek</name>
-            <email>antonin.stoklasek@salaryrobot.com</email>
-            <organizationUrl>http://www.salaryrobot.com</organizationUrl>
+            <email>antonin.stoklasek@osomahe.net</email>
+            <organizationUrl>http://www.osomahe.net</organizationUrl>
         </developer>
     </developers>
 
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>com.salaryrobot</groupId>
             <artifactId>salaryrobot-api</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>0.2.0</version>
         </dependency>
     </dependencies>
 
